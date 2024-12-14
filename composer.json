@@ -1,5 +1,5 @@
 {
-    "name": "Zithara/Webhook",
+    "name": "zithara/webhook",
     "description": "Zithara Magento 2 plugin for syncing Customers, Orders and Cart data from merchants magento ecommerce to Zithara.AI CRM.",
     "type": "magento2-module",
     "version": "1.0.0",
