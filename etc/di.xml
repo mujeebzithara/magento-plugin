@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Framework\MessageQueue\Consumer\Config\CompositeReader">
+        <arguments>
+            <argument name="readers" xsi:type="array">
+                <item name="zitharaWebhook" xsi:type="object">Magento\Framework\MessageQueue\Consumer\Config\Xml\Reader</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\MessageQueue\Publisher\Config\CompositeReader">
+        <arguments>
+            <argument name="readers" xsi:type="array">
+                <item name="zitharaWebhook" xsi:type="object">Magento\Framework\MessageQueue\Publisher\Config\Xml\Reader</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\MessageQueue\Topology\Config\CompositeReader">
+        <arguments>
+            <argument name="readers" xsi:type="array">
+                <item name="zitharaWebhook" xsi:type="object">Magento\Framework\MessageQueue\Topology\Config\Xml\Reader</item>
+            </argument>
+        </arguments>
+    </type>
+    <!-- Payment Event Plugin -->
+    <type name="Magento\Sales\Model\Order\Payment">
+        <plugin name="zithara_webhook_payment_plugin" type="Zithara\Webhook\Plugin\PaymentPlugin" sortOrder="10"/>
+    </type>   
+</config>

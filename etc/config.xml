@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <zithara_webhook>
+            <general>
+                <enabled>1</enabled>
+                <retry_limit>3</retry_limit>
+                <retry_delay>300</retry_delay>
+            </general>
+            <queue>
+                <batch_size>100</batch_size>
+                <max_retries>3</max_retries>
+                <abandoned_cart_threshold>10</abandoned_cart_threshold>
+            </queue>
+        </zithara_webhook>
+    </default>
+</config>

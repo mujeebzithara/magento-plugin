@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Zithara_Webhook::webhook" title="Zithara.AI Webhook Configuration" module="Zithara_Webhook" sortOrder="100" parent="Magento_Backend::stores_settings" action="zithara_webhook/config/index" resource="Zithara_Webhook::webhook"/>
+    </menu>
+</config>

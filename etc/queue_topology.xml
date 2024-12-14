@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/topology.xsd">
+    <exchange name="magento" type="topic" connection="amqp">
+        <binding id="ZitharaWebhookBinding" 
+                topic="zithara.webhook.events" 
+                destinationType="queue" 
+                destination="zithara_webhook_queue">
+            <arguments>
+                <argument name="routing_key" xsi:type="string">zithara.webhook.events</argument>
+            </arguments>
+        </binding>
+        <binding id="ZitharaCustomerBinding"
+                topic="zithara.customer.events"
+                destinationType="queue"
+                destination="zithara_customer_queue">
+            <arguments>
+                <argument name="routing_key" xsi:type="string">zithara.customer.events</argument>
+            </arguments>
+        </binding>
+        <binding id="ZitharaOrderBinding"
+                topic="zithara.order.events"
+                destinationType="queue"
+                destination="zithara_order_queue">
+            <arguments>
+                <argument name="routing_key" xsi:type="string">zithara.order.events</argument>
+            </arguments>
+        </binding>   
+        <binding id="ZitharaCartBinding"
+                topic="zithara.cart.events"
+                destinationType="queue"
+                destination="zithara_cart_queue">
+            <arguments>
+                <argument name="routing_key" xsi:type="string">zithara.cart.events</argument>
+            </arguments>
+        </binding>        
+    </exchange>
+</config>

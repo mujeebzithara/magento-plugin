@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/queue.xsd">
+    <broker topic="zithara.webhook.events" type="amqp" exchange="magento">
+        <queue name="zithara_webhook_queue" 
+               consumer="ZitharaWebhookConsumer" 
+               handler="Zithara\Webhook\Model\Queue\WebhookProcessor::process" 
+               consumerInstance="Magento\Framework\MessageQueue\Consumer" />
+    </broker>
+</config>

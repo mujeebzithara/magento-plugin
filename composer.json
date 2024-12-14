@@ -1,0 +1,26 @@
+{
+    "name": "Zithara/Webhook",
+    "description": "Zithara Magento 2 plugin for syncing Customers, Orders and Cart data from merchants magento ecommerce to Zithara.AI CRM.",
+    "type": "magento2-module",
+    "version": "1.0.0",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Mujeeb Rahman",
+            "email": "mujeeb@zithara.in",
+            "role": "CTO"
+        }
+    ],
+    "require": {
+        "php": ">=8.2",
+        "magento/framework": "^104.0"
+    },
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Zithara\\Webhook\\": ""
+        }
+    }
+}

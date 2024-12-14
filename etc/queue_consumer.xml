@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/consumer.xsd">
+    <consumer name="ZitharaWebhookConsumer" 
+             queue="zithara_webhook_queue" 
+             connection="amqp"
+             consumerInstance="Magento\Framework\MessageQueue\Consumer"
+             handler="Zithara\Webhook\Model\Queue\WebhookProcessor::process"
+             maxMessages="100"/>
+    <consumer name="ZitharaCustomerConsumer"
+             queue="zithara_customer_queue"
+             connection="amqp"
+             consumerInstance="Magento\Framework\MessageQueue\Consumer"
+             handler="Zithara\Webhook\Model\Queue\CustomerProcessor::process"
+             maxMessages="100"/>
+    <consumer name="ZitharaOrderConsumer"
+             queue="zithara_order_queue"
+             connection="amqp"
+             consumerInstance="Magento\Framework\MessageQueue\Consumer"
+             handler="Zithara\Webhook\Model\Queue\OrderProcessor::process"
+             maxMessages="100"/>
+    <consumer name="ZitharaCartConsumer"
+             queue="zithara_cart_queue"
+             connection="amqp"
+             consumerInstance="Magento\Framework\MessageQueue\Consumer"
+             handler="Zithara\Webhook\Model\Queue\CartProcessor::process"
+             maxMessages="100"/>             
+</config>

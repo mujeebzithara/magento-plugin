@@ -1,0 +1,114 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <!-- Customer Events -->
+    <event name="customer_save_after">
+        <observer name="zithara_webhook_customer_save" instance="Zithara\Webhook\Observer\CustomerSave" />
+    </event>
+    <event name="customer_save_after_data_object">
+        <observer name="zithara_webhook_customer_save_data_object" instance="Zithara\Webhook\Observer\CustomerSave" />
+        <observer name="zithara_webhook_customer_edit" instance="Zithara\Webhook\Observer\CustomerEdit" />
+    </event>
+    <event name="customer_register_success">
+        <observer name="zithara_webhook_customer_register" instance="Zithara\Webhook\Observer\CustomerSave" />
+    </event>
+    <event name="customer_delete_after">
+        <observer name="zithara_webhook_customer_delete" instance="Zithara\Webhook\Observer\CustomerDelete"/>
+    </event>
+    <event name="customer_address_save_after">
+        <observer name="zithara_webhook_customer_address_save" instance="Zithara\Webhook\Observer\CustomerAddressSave"/>
+    </event>
+    <event name="customer_login">
+        <observer name="zithara_webhook_customer_login" instance="Zithara\Webhook\Observer\CustomerLogin"/>
+    </event>
+    <event name="customer_logout">
+        <observer name="zithara_webhook_customer_logout" instance="Zithara\Webhook\Observer\CustomerLogout"/>
+    </event>
+
+    <!-- Payment Events -->
+    <event name="sales_order_payment_pay">
+        <observer name="zithara_webhook_payment_pay" instance="Zithara\Webhook\Observer\OrderPayment"/>
+    </event>
+    <!-- <event name="sales_order_payment_place_start">
+        <observer name="zithara_webhook_payment_place_start" instance="Zithara\Webhook\Observer\OrderPayment"/>
+    </event>
+    <event name="sales_order_payment_place_end">
+        <observer name="zithara_webhook_payment_place_end" instance="Zithara\Webhook\Observer\OrderPayment"/>
+    </event> 
+    <event name="sales_order_payment_capture">
+        <observer name="zithara_webhook_payment_capture" instance="Zithara\Webhook\Observer\PaymentCapture"/>
+    </event>
+    <event name="sales_order_payment_void">
+        <observer name="zithara_webhook_payment_void" instance="Zithara\Webhook\Observer\PaymentVoid"/>
+    </event>
+    <event name="sales_order_payment_cancel">
+        <observer name="zithara_webhook_payment_cancel" instance="Zithara\Webhook\Observer\PaymentCancel"/>
+    </event>
+    <event name="sales_order_payment_refund">
+        <observer name="zithara_webhook_payment_refund" instance="Zithara\Webhook\Observer\OrderRefund"/>
+    </event> -->
+
+    <!-- Order Events sales_order_save_after -->
+    <event name="sales_order_save_commit_after">
+        <observer name="zithara_webhook_order_save" instance="Zithara\Webhook\Observer\OrderCreate"/>
+    </event>
+   <!-- <event name="sales_order_place_after">
+        <observer name="zithara_webhook_order_place" instance="Zithara\Webhook\Observer\OrderCreate"/>
+    </event>
+    <event name="order_cancel_after">
+        <observer name="zithara_webhook_order_cancel" instance="Zithara\Webhook\Observer\OrderCancel"/>
+    </event>
+    <event name="sales_order_creditmemo_save_after">
+        <observer name="zithara_webhook_order_creditmemo" instance="Zithara\Webhook\Observer\OrderRefund"/>
+    </event> -->
+
+    <!-- Cart Events -->
+    <!-- <event name="checkout_cart_save_after">
+        <observer name="zithara_webhook_cart_save" instance="Zithara\Webhook\Observer\CartSave"/>
+    </event>
+    <event name="checkout_cart_update_items_after">
+        <observer name="zithara_webhook_cart_update" instance="Zithara\Webhook\Observer\CartUpdate"/>
+    </event>
+    <event name="checkout_cart_product_add_after">
+        <observer name="zithara_webhook_cart_add_product" instance="Zithara\Webhook\Observer\CartAddProduct"/>
+    </event>
+    <event name="checkout_cart_delete">
+        <observer name="zithara_webhook_cart_delete" instance="Zithara\Webhook\Observer\CartDelete"/>
+    </event>
+    <event name="sales_quote_remove_item">
+        <observer name="zithara_webhook_cart_remove_item" instance="Zithara\Webhook\Observer\CartRemoveItem"/>
+    </event> -->
+    
+    <!-- A cart is created automatically when a new quote is initialized for a customer or guest.
+         Triggered when a new or existing quote is saved. Use this to detect a new cart creation.
+     -->
+    <event name="sales_quote_save_after">
+        <observer name="zithara_webhook_cart_save" instance="Zithara\Webhook\Observer\CartSave"/>
+    </event>
+    
+    <!--
+        This occurs when an existing cart is modified, such as changes to quantities or totals.
+        Triggered after the cart items are updated.
+     -->
+    <event name="checkout_cart_update_items_after">
+        <observer name="zithara_webhook_cart_update" instance="Zithara\Webhook\Observer\CartUpdate"/>
+    </event>
+    
+    <!-- 
+        Triggered when an item is added to the cart.
+        Triggered after a product is successfully added to the cart.
+    -->
+    <event name="checkout_cart_product_add_after">
+        <observer name="zithara_webhook_cart_add_product" instance="Zithara\Webhook\Observer\CartAddProduct"/>
+    </event>
+    <!-- 
+        Triggered when an item is removed from the cart.
+        Triggered after an item is removed from the cart.
+    -->
+    <event name="sales_quote_remove_item">
+        <observer name="zithara_webhook_cart_delete" instance="Zithara\Webhook\Observer\CartRemoveItem"/>
+    </event>
+    <!--when cart is deleted-->
+    <event name="checkout_cart_delete">
+        <observer name="zithara_webhook_cart_delete" instance="Zithara\Webhook\Observer\CartDelete"/>
+    </event>    
+</config>

@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Communication/etc/communication.xsd">
+    <topic name="zithara.webhook.events" request="string"/>
+    <topic name="zithara.customer.events" request="string"/>
+    <topic name="zithara.order.events" request="string"/>
+    <topic name="zithara.cart.events" request="string"/>
+</config>
