@@ -31,7 +31,7 @@ class CustomerAddressSave implements ObserverInterface
     {
         try {
             $customerAddress = $observer->getEvent()->getCustomerAddress();
-            
+
             // Defensive check for customer address object
             if (!$customerAddress || !is_object($customerAddress)) {
                 $this->logger->error('CustomerAddressSave: Invalid customer address object.');
@@ -39,7 +39,7 @@ class CustomerAddressSave implements ObserverInterface
             }
 
             $customer = $customerAddress->getCustomer();
-            
+
             // Defensive check for customer object
             if (!$customer || !is_object($customer)) {
                 $this->logger->error('CustomerAddressSave: Invalid customer object.');

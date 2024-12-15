@@ -91,7 +91,7 @@ class CustomerProcessor
     protected function validateCustomerData($data)
     {
         $requiredFields = ['platform_customer_id', 'email'];
-        
+
         // Phone number is mandatory for updates
         if (!empty($data['is_update'])) {
             $requiredFields[] = 'phone_number';
@@ -114,7 +114,7 @@ class CustomerProcessor
     {
         try {
             // Check if we have a valid token
-            if ($config->getAccessToken() && $config->getTokenExpiry() && 
+            if ($config->getAccessToken() && $config->getTokenExpiry() &&
                 strtotime($config->getTokenExpiry()) > time()) {
                 return $config->getAccessToken();
             }
