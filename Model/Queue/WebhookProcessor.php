@@ -12,7 +12,7 @@ class WebhookProcessor
 {
     const MAX_RETRIES = 3;
     const RETRY_DELAY = 5; // seconds
-
+    
     protected $curl;
     protected $jsonHelper;
     protected $configFactory;
@@ -42,7 +42,7 @@ class WebhookProcessor
             }
 
             $this->logger->info('WebhookProcessor: Processing webhook message');
-
+            
             try {
                 $data = $this->jsonHelper->jsonDecode($message, true);
             } catch (\Exception $e) {
@@ -156,7 +156,7 @@ class WebhookProcessor
                 }
             }
         }
-
+        
         $this->logger->error('WebhookProcessor: Failed to obtain access token after retries');
         return null;
     }
@@ -166,7 +166,7 @@ class WebhookProcessor
         for ($attempt = 1; $attempt <= self::MAX_RETRIES; $attempt++) {
             try {
                 $webhookCurl = new Curl();
-
+                
                 $headers = [
                     'Content-Type' => 'application/json',
                     'Accept' => 'application/json',
@@ -227,7 +227,7 @@ class WebhookProcessor
 
     protected function getAccessToken($config)
     {
-        if ($config->getAccessToken() && $config->getTokenExpiry() &&
+        if ($config->getAccessToken() && $config->getTokenExpiry() && 
             strtotime($config->getTokenExpiry()) > time()) {
             return $config->getAccessToken();
         }
@@ -239,7 +239,7 @@ class WebhookProcessor
             'client_id' => $config->getClientId(),
             'endpoint' => $this->apiEndpoints->getTokenEndpoint()
         ]);
-
+        
         // Set headers as per API requirements
         $tokenCurl->addHeader('Content-Type', 'application/json');
         $tokenCurl->addHeader('Accept', 'application/json');
@@ -281,8 +281,8 @@ class WebhookProcessor
 
         try {
             $config->setAccessToken($response['access_token']);
-            $expiresIn = isset($response['expires_in']) && is_numeric($response['expires_in'])
-                ? (int)$response['expires_in']
+            $expiresIn = isset($response['expires_in']) && is_numeric($response['expires_in']) 
+                ? (int)$response['expires_in'] 
                 : 3600;
             $config->setTokenExpiry(date('Y-m-d H:i:s', time() + $expiresIn));
             $config->save();

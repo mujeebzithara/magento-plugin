@@ -43,11 +43,10 @@ class CustomerSave implements ObserverInterface
     {
         try {
             $customer = $observer->getEvent()->getCustomer();
-
             if (!$customer) {
                 $customer = $observer->getEvent()->getDataObject();
             }
-
+            
             // Defensive check for customer object
             if (!$customer || !is_object($customer)) {
                 $this->logger->error('CustomerSave: Invalid customer object.');
@@ -65,8 +64,7 @@ class CustomerSave implements ObserverInterface
                            !$customer->getId() ||
                            ($customer->getOrigData() && !$customer->getOrigData('entity_id'));
 
-//            if (!$isNewCustomer) {
-            if (!$customer->getId()) {
+            if (!$isNewCustomer) {
                 $this->logger->info('CustomerSave: Not a new customer, skipping Zithara API call');
                 return;
             }
@@ -97,20 +95,7 @@ class CustomerSave implements ObserverInterface
                 }
             }
 
-            // Get mobilenumber field from customAttributes when signup page
-            if(!empty($customAttributes) && isset($customAttributes['mobilenumber']) && !empty($customAttributes['mobilenumber'])){
-                $phoneNumber = str_replace(' ', '', $customAttributes['mobilenumber']);
-            }
-
-            // Get mobilenumber field from customer Data when checkout page
-            if ($customer && method_exists($customer, 'getData')) {
-                $customerData = $customer->getData();
-                if(!empty($customerData) && isset($customerData['mobilenumber']) && !empty($customerData['mobilenumber'])){
-                    $phoneNumber = str_replace(' ', '', $customerData['mobilenumber']);
-                }
-            }
-
-	        $randomNumber = mt_rand(10000000, 99999999); // 8-digit random number
+	    $randomNumber = mt_rand(10000000, 99999999); // 8-digit random number
             // Prepare data for Zithara API
             $zitharaData = [
                 'platform_customer_id' => $customer->getId(),
