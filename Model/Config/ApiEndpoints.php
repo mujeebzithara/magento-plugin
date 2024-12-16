@@ -3,7 +3,7 @@ namespace Zithara\Webhook\Model\Config;
 
 class ApiEndpoints
 {
-    const BASE_URL = 'https://dev-pos-api.zithara.com/v1';
+    const BASE_URL = 'https://pos-api.zithara.com/v1';
     
     // Authentication endpoint
     const TOKEN_ENDPOINT = self::BASE_URL . '/generate-access-token';
