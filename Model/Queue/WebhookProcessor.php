@@ -33,6 +33,15 @@ class WebhookProcessor
         $this->apiEndpoints = $apiEndpoints;
     }
 
+    /**
+     * Processes a webhook message by validating required fields, converting custom
+     * attributes, loading webhook configuration, obtaining a fresh access token,
+     * and sending the message to the Zithara API. Logs errors for invalid JSON format,
+     * missing configuration, or token retrieval issues.
+     * 
+     * @param string $message JSON string containing webhook data
+     * @return void
+     */
     public function process($message)
     {
         try {

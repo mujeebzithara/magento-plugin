@@ -42,9 +42,20 @@ class CheckAbandonedCarts
                 return;
             }
 
+            // Log current time
+            $this->logger->info('CheckAbandonedCarts: Current time', [
+                'current_time' => $currentTime
+            ]);
+
             // Calculate time range in minutes (default 10 minutes)
             $from = $this->dateTime->gmtDate('Y-m-d H:i:s', strtotime('-24 hours'));
-            $to = $this->dateTime->gmtDate('Y-m-d H:i:s', strtotime('-30 minutes'));
+            $to = $this->dateTime->gmtDate('Y-m-d H:i:s', strtotime('-2 minutes'));
+
+            // Log time range
+            $this->logger->info('CheckAbandonedCarts: Time range', [
+                'from' => $from,
+                'to' => $to
+            ]);
 
             if (!$from || !$to) {
                 $this->logger->error('CheckAbandonedCarts: Unable to calculate time range');
@@ -58,10 +69,21 @@ class CheckAbandonedCarts
                     ->addFieldToFilter('items_count', ['gt' => 0])
                     ->addFieldToFilter('customer_email', ['notnull' => true])
                     ->addFieldToFilter('updated_at', ['from' => $from, 'to' => $to]);
-                $this->logger->info('CheckAbandonedCarts: quoteCollection details: ' . json_encode($quoteCollection));
+
+                // Log collection query
+                $this->logger->info('CheckAbandonedCarts: Collection Query', [
+                    'sql' => $quoteCollection->getSelect()->__toString()
+                ]);
+
+                // Log total quotes found
+                $this->logger->info('CheckAbandonedCarts: Total quotes found', [
+                    'count' => $quoteCollection->getSize()
+                ]);
+
             } catch (\Exception $e) {
                 $this->logger->error('CheckAbandonedCarts: Error creating quote collection', [
-                    'error' => $e->getMessage()
+                    'error' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString()
                 ]);
                 return;
             }
@@ -77,17 +99,36 @@ class CheckAbandonedCarts
                         continue;
                     }
 
-                    // Log the quote data for debugging
-                    $this->logger->info('CheckAbandonedCarts: Processing quote', [
+                    // Log detailed quote information
+                    $this->logger->info('CheckAbandonedCarts: Quote Details', [
                         'quote_id' => $quote->getId(),
                         'customer_id' => $quote->getCustomerId(),
-                        'item_count' => $quote->getItemsCount()
+                        'customer_email' => $quote->getCustomerEmail(),
+                        'customer_firstname' => $quote->getCustomerFirstname(),
+                        'customer_lastname' => $quote->getCustomerLastname(),
+                        'store_id' => $quote->getStoreId(),
+                        'created_at' => $quote->getCreatedAt(),
+                        'updated_at' => $quote->getUpdatedAt(),
+                        'is_active' => $quote->getIsActive(),
+                        'items_count' => $quote->getItemsCount(),
+                        'items_qty' => $quote->getItemsQty(),
+                        'grand_total' => $quote->getGrandTotal(),
+                        'base_grand_total' => $quote->getBaseGrandTotal()
                     ]);
 
-                    // Get all visible items
-                    $items = $quote->getAllVisibleItems();
-                    if (!$items || empty($items)) {
-                        $this->logger->warning('CheckAbandonedCarts: No visible items in quote', [
+                    // Get all items (both visible and non-visible)
+                    $allItems = $quote->getAllItems();
+                    $visibleItems = $quote->getAllVisibleItems();
+
+                    // Log items count
+                    $this->logger->info('CheckAbandonedCarts: Items Count', [
+                        'quote_id' => $quote->getId(),
+                        'all_items_count' => count($allItems),
+                        'visible_items_count' => count($visibleItems)
+                    ]);
+
+                    if (!$allItems || empty($allItems)) {
+                        $this->logger->warning('CheckAbandonedCarts: No items in quote', [
                             'quote_id' => $quote->getId()
                         ]);
                         continue;
@@ -95,13 +136,32 @@ class CheckAbandonedCarts
 
                     // Prepare cart items data with defensive checks
                     $cartItems = [];
-                    foreach ($items as $item) {
+                    foreach ($allItems as $item) {
                         if ($item && is_object($item)) {
+                            // Log detailed item information
+                            $this->logger->info('CheckAbandonedCarts: Item Details', [
+                                'quote_id' => $quote->getId(),
+                                'item_id' => $item->getId(),
+                                'product_id' => $item->getProductId(),
+                                'sku' => $item->getSku(),
+                                'name' => $item->getName(),
+                                'qty' => $item->getQty(),
+                                'price' => $item->getPrice(),
+                                'base_price' => $item->getBasePrice(),
+                                'row_total' => $item->getRowTotal(),
+                                'base_row_total' => $item->getBaseRowTotal(),
+                                'tax_amount' => $item->getTaxAmount(),
+                                'base_tax_amount' => $item->getBaseTaxAmount(),
+                                'discount_amount' => $item->getDiscountAmount(),
+                                'base_discount_amount' => $item->getBaseDiscountAmount()
+                            ]);
+
                             $itemId = $item->getId();
                             if (!$itemId) {
                                 $this->logger->warning('CheckAbandonedCarts: Missing item ID', [
                                     'quote_id' => $quote->getId(),
-                                    'product_id' => $item->getProductId()
+                                    'product_id' => $item->getProductId(),
+                                    'sku' => $item->getSku()
                                 ]);
                                 continue;
                             }
@@ -125,6 +185,13 @@ class CheckAbandonedCarts
 
                     // Get billing address with defensive check
                     $billingAddress = $quote->getBillingAddress();
+                    
+                    // Log billing address details
+                    $this->logger->info('CheckAbandonedCarts: Billing Address', [
+                        'quote_id' => $quote->getId(),
+                        'address_data' => $billingAddress ? $billingAddress->getData() : 'No billing address'
+                    ]);
+
                     $telephone = $billingAddress && $billingAddress->getTelephone() ? $billingAddress->getTelephone() : '';
 
                     // Prepare customer data
@@ -138,6 +205,12 @@ class CheckAbandonedCarts
                         'custom_attributes' => new \stdClass()
                     ];
 
+                    // Log customer data
+                    $this->logger->info('CheckAbandonedCarts: Customer Data', [
+                        'quote_id' => $quote->getId(),
+                        'customer_data' => $customerData
+                    ]);
+
                     // Prepare cart data
                     $cartData = [
                         'currency' => $quote->getQuoteCurrencyCode() ?? 'INR',
@@ -149,12 +222,24 @@ class CheckAbandonedCarts
                         'shopify_customer_id' => $quote->getCustomerId()
                     ];
 
+                    // Log cart data
+                    $this->logger->info('CheckAbandonedCarts: Cart Data', [
+                        'quote_id' => $quote->getId(),
+                        'cart_data' => $cartData
+                    ]);
+
                     // Prepare webhook data
                     $webhookData = [
                         'customer' => $customerData,
                         'cart_item' => $cartItems,
                         'cart' => $cartData
                     ];
+
+                    // Log complete webhook payload
+                    $this->logger->info('CheckAbandonedCarts: Webhook Payload', [
+                        'quote_id' => $quote->getId(),
+                        'payload' => $webhookData
+                    ]);
 
                     // Publish to queue
                     $this->publisher->publish(
@@ -174,14 +259,16 @@ class CheckAbandonedCarts
                     $errorCount++;
                     $this->logger->error('CheckAbandonedCarts: Error processing quote', [
                         'quote_id' => $quote->getId() ?? 'unknown',
-                        'error' => $e->getMessage()
+                        'error' => $e->getMessage(),
+                        'trace' => $e->getTraceAsString()
                     ]);
                 }
             }
 
             $this->logger->info('CheckAbandonedCarts: Completed processing', [
                 'processed' => $processedCount,
-                'errors' => $errorCount
+                'errors' => $errorCount,
+                'total_quotes' => $quoteCollection->getSize()
             ]);
 
         } catch (\Exception $e) {
@@ -198,13 +285,28 @@ class CheckAbandonedCarts
             return '';
         }
 
+        // Log original phone number
+        $this->logger->info('CheckAbandonedCarts: Formatting phone number', [
+            'original' => $phone
+        ]);
+
         // Remove any non-numeric characters
         $phone = preg_replace('/[^0-9]/', '', $phone);
+
+        // Remove leading zero if present
+        if (substr($phone, 0, 1) === '0') {
+            $phone = substr($phone, 1);
+        }
 
         // Ensure it starts with '91'
         if (substr($phone, 0, 2) !== '91') {
             $phone = '91' . $phone;
         }
+
+        // Log formatted phone number
+        $this->logger->info('CheckAbandonedCarts: Formatted phone number', [
+            'formatted' => $phone
+        ]);
 
         return $phone;
     }
