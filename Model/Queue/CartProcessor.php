@@ -30,6 +30,14 @@ class CartProcessor
         $this->apiEndpoints = $apiEndpoints;
     }
 
+    /**
+     * Processes a cart message by decoding the JSON payload, retrieving configuration
+     * and access token, transforming the cart data, and sending it to the Zithara API.
+     * Logs errors for invalid JSON format, missing configuration, or token retrieval issues.
+     *
+     * @param string $message JSON formatted cart data
+     * @return void
+     */
     public function process($message)
     {
         try {

@@ -33,6 +33,14 @@ class CustomerProcessor
         $this->apiEndpoints = $apiEndpoints;
     }
 
+    /**
+     * Processes a customer message by validating required fields, converting custom
+     * attributes, loading webhook configuration, obtaining a fresh access token,
+     * and sending the customer data to the Zithara API.
+     *
+     * @param string $message JSON string containing customer data
+     * @return void
+     */
     public function process($message)
     {
         try {
