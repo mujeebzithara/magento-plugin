@@ -101,8 +101,8 @@ class CartProcessor
     {
         try {
             // Use the correct data structure based on the input
-            $cart = $data['quote'] ?? [];
-            $cartItems = $data['items'] ?? [];
+            $cart = $data['cart'] ?? [];
+            $cartItems = $data['cart_item'] ?? [];
             $customer = $data['customer'] ?? [];
 
             // Log input data for transformation
