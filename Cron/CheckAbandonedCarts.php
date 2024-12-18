@@ -49,7 +49,7 @@ class CheckAbandonedCarts
 
             // Calculate time range in minutes (default 10 minutes)
             $from = $this->dateTime->gmtDate('Y-m-d H:i:s', strtotime('-24 hours'));
-            $to = $this->dateTime->gmtDate('Y-m-d H:i:s', strtotime('-2 minutes'));
+            $to = $this->dateTime->gmtDate('Y-m-d H:i:s', strtotime('-30 minutes'));
 
             // Log time range
             $this->logger->info('CheckAbandonedCarts: Time range', [
