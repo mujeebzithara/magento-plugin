@@ -113,8 +113,9 @@ class CartProcessor
             ]);
 
             // Transform customer data
+            //!empty($order['customer_id']) ? (string)$order['customer_id']
             $customerData = [
-                'platform_customer_id' => $customer['platform_customer_id'] ?? '',
+                'platform_customer_id' => !empty($customer['platform_customer_id']) ? (string)$customer['platform_customer_id'] : '',
                 'first_name' => $customer['first_name'] ?? '',
                 'last_name' => $customer['last_name'] ?? '',
                 'name' => $customer['name'] ?? trim(($customer['first_name'] ?? '') . ' ' . ($customer['last_name'] ?? '')),
