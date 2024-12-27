@@ -119,6 +119,7 @@ class CartProcessor
                 'last_name' => $customer['last_name'] ?? '',
                 'name' => $customer['name'] ?? trim(($customer['first_name'] ?? '') . ' ' . ($customer['last_name'] ?? '')),
                 'whatsapp_phone_number' => $customer['whatsapp_phone_number'] ?? '',
+                'phone_number' => $customer['phone_number'] ?? 'NA',
                 'email' => $customer['email'] ?? false,
                 'custom_attributes' => new \stdClass()
             ];
