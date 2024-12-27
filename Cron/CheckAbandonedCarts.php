@@ -95,7 +95,7 @@ class CheckAbandonedCarts
             }
 
             $from = $this->dateTime->gmtDate('Y-m-d H:i:s', strtotime('-24 hours'));
-            $to = $this->dateTime->gmtDate('Y-m-d H:i:s', strtotime('-30 minutes'));
+            $to = $this->dateTime->gmtDate('Y-m-d H:i:s', strtotime('-2 minutes'));
 
             if (!$from || !$to) {
                 $this->logger->error('CheckAbandonedCarts: Unable to calculate time range');
